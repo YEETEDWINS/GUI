@@ -1,6 +1,21 @@
 from tkinter import *
 
-def Converter():
+def conversion():
+  print("hello")
+  celcius = cinput.get()
+  kelvin = kinput.get()
+  print(celcius+" word")
+  print(kelvin+" word")
+  if celcius != "" and kelvin == "":
+    print("celcius")
+    celcius = int(celcius)
+    value = round(celcius+273.15, 2)
+    kinput.insert(0, value)
+  elif celcius == "" and kelvin != "":
+    print("kelvin")
+    kelvin = int(kelvin)
+    value = round(kelvin-273.15, 2)
+    cinput.insert(0, value)
 
 wn = Tk()
 wn.title("Temp Converter")
@@ -20,7 +35,7 @@ cinput.grid(row=2, column=0, padx=25)
 kinput = Entry(wn)
 kinput.grid(row=2, column=1, padx=25)
 
-converter = Button(wn, text="Convert!", font=("Bradley Hand", 30))
+converter = Button(wn, text="Convert!", font=("Bradley Hand", 30), command=conversion)
 converter.grid(row=3, column=0, columnspan=2, pady=100)
 
 wn.mainloop()
