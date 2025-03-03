@@ -27,6 +27,11 @@ leftframe.pack(side=LEFT, padx=20)
 storage = Listbox(leftframe, height=15, width=25)
 storage.pack()
 
+edit = Button(leftframe, text="Edit")
+edit.pack(side=LEFT, padx=30, ipadx=5)
+delete = Button(leftframe, text="Delete")
+delete.pack(side=LEFT)
+
 # Right Frame
 rightframe = Frame(mframe)
 rightframe.pack(side=LEFT)
@@ -56,16 +61,10 @@ dof.grid(row=5, column=1, padx=10, pady=10)
 dofInput = Entry(rightframe)
 dofInput.grid(row=5, column=2, padx=10, pady=10)
 
-## BOTTOM FRAME
-bframe = Frame(wn)
-bframe.pack()
+hidden = Label(rightframe)
+hidden.grid(row=6, column=2, padx=10)
 
-edit = Button(bframe, text="Edit")
-edit.grid(row=1, column=1)
-delete = Button(bframe, text="Delete")
-delete.grid(row=1, column=2)
-
-addupd = Button(bframe, text="Add / Update")
-addupd.grid(row=1, column=4, columnspan=2)
+addupd = Button(rightframe, text="Add / Update")
+addupd.grid(row=7, column=1, columnspan=2, ipadx=30, pady=0)
 
 wn.mainloop()
