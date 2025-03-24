@@ -1,11 +1,39 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter.filedialog import askopenfile, asksaveasfile
+import os
 
 wn = Tk("Address Book")
 wn.geometry("600x600")
 wn.title("Address Book")
 
 addressbook = {}
+
+def cleanUp():
+  clEntries()
+  storage.delete(0, END)
+  addressbook.clear()
+  filename.config(text="Address book")
+
+def saveFile():
+  a = asksaveasfile()
+  if a:
+    print(addressbook, file=a)
+    cleanUp()
+  else:
+    messagebox.showwarning("Error", "Could not be saved!")
+
+def openFile():
+  cleanUp()
+  a = askopenfile()
+  if a:
+    addressbook = eval(a.read())
+    for i in addressbook.keys():
+      storage.insert(END, i)
+    fn = os.path.basename(a.name)
+    filename.config(text=fn)
+
+
 
 def addUpdate():
   personName = nameInput.get()
@@ -42,6 +70,16 @@ def editEntries():
     emailInput.insert(0, details[2])
     dofInput.insert(0, details[3])
   else:
+    messagebox.showwarning("Error 101", "Select a nawme!!!")
+
+def delEntries():
+  item = storage.curselection()
+  if item:
+    selectedName = storage.get(item) 
+    storage.delete(item)
+    del addressbook[selectedName]
+    print(addressbook)
+  else:
     messagebox.showwarning("Error 101", "Select a name!!!")
 
 ## TOP FRAME
@@ -51,10 +89,10 @@ tframe.pack()
 filename = Label(tframe, text="Address Book")
 filename.grid(row=1, column=1, padx=15)
 
-open = Button(tframe, text="Open")
+open = Button(tframe, text="Open", command=openFile)
 open.grid(row=1, column=2, padx=95, pady=20)
 
-save = Button(tframe, text="Save")
+save = Button(tframe, text="Save", command=saveFile)
 save.grid(row=1, column=3)
 
 ## MIDDLE FRAME
@@ -70,7 +108,7 @@ storage.pack()
 
 edit = Button(leftframe, text="Edit", command=editEntries)
 edit.pack(side=LEFT, padx=30, ipadx=5)
-delete = Button(leftframe, text="Delete")
+delete = Button(leftframe, text="Delete", command=delEntries)
 delete.pack(side=LEFT)
 
 # Right Frame
