@@ -24,16 +24,15 @@ def saveFile():
     messagebox.showwarning("Error", "Could not be saved!")
 
 def openFile():
-  cleanUp()
   a = askopenfile()
   if a:
+    cleanUp()
+    global addressbook
     addressbook = eval(a.read())
     for i in addressbook.keys():
       storage.insert(END, i)
     fn = os.path.basename(a.name)
     filename.config(text=fn)
-
-
 
 def addUpdate():
   personName = nameInput.get()
@@ -70,7 +69,7 @@ def editEntries():
     emailInput.insert(0, details[2])
     dofInput.insert(0, details[3])
   else:
-    messagebox.showwarning("Error 101", "Select a nawme!!!")
+    messagebox.showwarning("Error 101", "Select a name!!!")
 
 def delEntries():
   item = storage.curselection()
@@ -81,6 +80,29 @@ def delEntries():
     print(addressbook)
   else:
     messagebox.showwarning("Error 101", "Select a name!!!")
+
+def details(event):
+  global Tl
+  print(event)
+  if Tl:  
+    Tl.destroy()
+  Tl = Toplevel(wn)
+  Tl.geometry("200x130")
+  Tl.title("Details")
+  item = storage.curselection()
+  if item:
+    selectedName = storage.get(item) 
+    info = addressbook[selectedName]
+    TlName = Label(Tl, text="Name: "+selectedName, justify="left")
+    TlAddress = Label(Tl, text="Address: "+info[0], justify="left")
+    TlMobile = Label(Tl, text="Mobile: "+info[1], justify="left")
+    TlEmail = Label(Tl, text="E-mail: "+info[2], justify="left")
+    TlDOB = Label(Tl, text="Date of Birth: "+info[3], justify="left")
+    TlName.pack()
+    TlAddress.pack()
+    TlMobile.pack()
+    TlEmail.pack()
+    TlDOB.pack()
 
 ## TOP FRAME
 tframe = Frame(wn)
@@ -95,6 +117,8 @@ open.grid(row=1, column=2, padx=95, pady=20)
 save = Button(tframe, text="Save", command=saveFile)
 save.grid(row=1, column=3)
 
+Tl = None
+
 ## MIDDLE FRAME
 mframe = Frame(wn)
 mframe.pack()
@@ -104,6 +128,7 @@ leftframe = Frame(mframe)
 leftframe.pack(side=LEFT, padx=20)
 
 storage = Listbox(leftframe, height=15, width=25)
+storage.bind('<<Double-Button-1>>', details)
 storage.pack()
 
 edit = Button(leftframe, text="Edit", command=editEntries)
